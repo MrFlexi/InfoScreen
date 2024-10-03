@@ -1,17 +1,24 @@
-<ion-header [translucent]="true">
+<!-- src/app/tab1/tab1.page.html -->
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <ion-title>Datasets</ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/add-dataset']">Add</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let dataset of dataService.datasets" (dblclick)="viewImage(dataset)">
+      <ion-thumbnail slot="start">
+        <ion-img [src]="getImageUrl(dataset.picture)"></ion-img>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ dataset.name }}</h2>
+        <p>{{ dataset.description }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
+

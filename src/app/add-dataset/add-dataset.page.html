@@ -1,13 +1,32 @@
-<ion-header [translucent]="true">
+<!-- src/app/add-dataset/add-dataset.page.html -->
+<ion-header>
   <ion-toolbar>
-    <ion-title>add-dataset</ion-title>
+    <ion-title>Add Dataset</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">add-dataset</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <form (ngSubmit)="saveDataset()">
+    <ion-item>
+      <ion-label position="stacked">Name</ion-label>
+      <ion-input [(ngModel)]="dataset.name" name="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Description</ion-label>
+      <ion-input [(ngModel)]="dataset.description" name="description"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Created By</ion-label>
+      <ion-input [(ngModel)]="dataset.createdBy" name="createdBy"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Picture</ion-label>
+      <ion-button (click)="takePicture()">Take Picture</ion-button>
+      <ion-thumbnail *ngIf="dataset.picture">
+        <ion-img [src]="pictureUrl"></ion-img>
+      </ion-thumbnail>
+    </ion-item>
+    <ion-button expand="full" type="submit">Save</ion-button>
+  </form>
 </ion-content>
+
