@@ -4,6 +4,8 @@ export interface Dataset {
     name: string;          // Name or title of the dataset
     description: string;   // Description of the dataset
     picture: string;       // Relative path or URL of the picture
+    filepath: string;
+    webviewPath?: string;
     createdBy: string;     // The creator of the dataset
     createdAt: string;     // Timestamp of creation (ISO 8601 format)
   }

@@ -21,9 +21,13 @@
     </ion-item>
     <ion-item>
       <ion-label position="stacked">Picture</ion-label>
+      <ion-input [(ngModel)]="dataset.picture" name="picture"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Picture</ion-label>
       <ion-button (click)="takePicture()">Take Picture</ion-button>
-      <ion-thumbnail *ngIf="dataset.picture">
-        <ion-img [src]="pictureUrl"></ion-img>
+      <ion-thumbnail *ngIf="dataset.webviewPath">
+        <ion-img [src]="dataset.webviewPath"></ion-img>
       </ion-thumbnail>
     </ion-item>
     <ion-button expand="full" type="submit">Save</ion-button>

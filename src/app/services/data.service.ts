@@ -10,7 +10,7 @@ export class DataService {
   private fileName = 'datasets.json';
   public datasets: Dataset[] = [];
 
-  constructor() { 
+  constructor() {
     this.loadDatasets();
   }
 
@@ -25,20 +25,18 @@ export class DataService {
       });
 
       // Check if result.data is a Blob and convert it to string
-    let fileData: string;
+      let fileData: string;
 
-    if (typeof result.data === 'string') {
-      // If it's already a string, just use it
-      fileData = result.data;
-    } else if (result.data instanceof Blob) {
-      // Convert Blob to string
-      fileData = await this.blobToString(result.data);
-    } else {
-      throw new Error('Unexpected data format');
-    }
-
-
-
+      if (typeof result.data === 'string') {
+        // If it's already a string, just use it
+        fileData = result.data;
+      } else if (result.data instanceof Blob) {
+        // Convert Blob to string
+        fileData = await this.blobToString(result.data);
+      } else {
+        throw new Error('Unexpected data format');
+      }
+      
       this.datasets = JSON.parse(fileData);
       console.log('Data loaded from filesystem');
     } catch (error) {
@@ -47,11 +45,11 @@ export class DataService {
     }
   }
 
-  async addDataset(dataset: Dataset): Promise<void> {    
+  async addDataset(dataset: Dataset): Promise<void> {
     this.datasets.push(dataset);
     this.saveDatasets();
-    };
-  
+  };
+
 
   private saveDatasets() {
     Filesystem.writeFile({
@@ -63,14 +61,14 @@ export class DataService {
   }
 
   // Helper function to convert Blob to string
-blobToString(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsText(blob);
-  });
-}
+  blobToString(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsText(blob);
+    });
+  }
 
 }
 

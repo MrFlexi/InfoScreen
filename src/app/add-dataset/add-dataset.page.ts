@@ -16,6 +16,8 @@ export class AddDatasetPage {
     name: '',
     description: '',
     picture: '',
+    filepath: '',
+    webviewPath: '',
     createdBy: '',
     createdAt: ''
   };
@@ -23,14 +25,14 @@ export class AddDatasetPage {
 
   constructor(
     private dataService: DataService,
-    private photoService: PhotoService,
+    public photoService: PhotoService,
     private navCtrl: NavController
   ) {}
 
   async takePicture() {
-    const fileName = await this.photoService.takePhoto();
-    this.dataset.picture = fileName;
-    this.pictureUrl = `pictures/${fileName}`;
+    const newPicture = await this.photoService.addNewToGallery();
+    this.dataset.webviewPath = newPicture.webviewPath;
+    this.dataset.filepath = newPicture.filepath;    
   }
 
   async saveDataset() {

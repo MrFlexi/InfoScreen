@@ -1,7 +1,7 @@
 <!-- src/app/tab1/tab1.page.html -->
 <ion-header>
   <ion-toolbar>
-    <ion-title>Datasets</ion-title>
+    <ion-title>Rezepte</ion-title>
     <ion-buttons slot="end">
       <ion-button [routerLink]="['/add-dataset']">Add</ion-button>
     </ion-buttons>
@@ -12,11 +12,11 @@
   <ion-list>
     <ion-item *ngFor="let dataset of dataService.datasets" (dblclick)="viewImage(dataset)">
       <ion-thumbnail slot="start">
-        <ion-img [src]="getImageUrl(dataset.picture)"></ion-img>
+        <ion-img [src]="dataset.webviewPath"></ion-img>        
       </ion-thumbnail>
       <ion-label>
         <h2>{{ dataset.name }}</h2>
-        <p>{{ dataset.description }}</p>
+        <p>{{ dataset.description }}</p>        
       </ion-label>
     </ion-item>
   </ion-list>
