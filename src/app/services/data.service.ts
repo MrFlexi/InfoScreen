@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Dataset } from '../models/dataset.model';  // Import the dataset interface
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { PhotoService } from '../services/photo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,15 @@ export class DataService {
   private fileName = 'datasets.json';
   public datasets: Dataset[] = [];
 
-  constructor() {
-    this.loadDatasets();
+  constructor( private photoService: PhotoService,) {
+  this.setup();
   }
 
+
+  async setup(){
+    await this.loadDatasets();
+    await this.photoService.loadAllPictures( this.datasets);  
+  }
 
   // Load datasets from filesystem
   async loadDatasets() {
@@ -36,9 +42,10 @@ export class DataService {
       } else {
         throw new Error('Unexpected data format');
       }
-      
+
       this.datasets = JSON.parse(fileData);
       console.log('Data loaded from filesystem');
+      console.log('Dataset' + fileData);
     } catch (error) {
       console.log('No file found or unable to load file. Initializing with empty array');
       this.datasets = [];  // Initialize with empty array if file is not found

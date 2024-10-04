@@ -4,6 +4,7 @@ import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Platform } from '@ionic/angular';
 import { Capacitor } from '@capacitor/core';
+import { Dataset } from '../models/dataset.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,14 +34,12 @@ export class PhotoService {
   }
 
   private async savePicture(photo: Photo) {   
-
     // Convert photo to base64 format, required by Filesystem API to save
-    const base64Data = await this.readAsBase64(photo);
-  
+    const base64Data = await this.readAsBase64(photo);  
     // Write the file to the data directory
     const fileName = Date.now() + '.jpeg';
     const savedFile = await Filesystem.writeFile({
-      path: `pictures/${fileName}`,
+      path: fileName,
       data: base64Data,
       directory: Directory.Data
     });
@@ -63,7 +62,25 @@ export class PhotoService {
     }
   }
 
+  public async loadAllPictures(datasets: Dataset[]) { 
+ 
+    if (!this.platform.is('hybrid')) {
+      console.log("Load Photo hybrid");
+      // Display the photo by reading into base64 format
+      for (let photo of datasets) {
+        // Read each saved photo's data from the Filesystem
+        console.log("Load Photo" + photo.filepath)  
 
+        const readFile = await Filesystem.readFile({
+            path: photo.filepath,
+            directory: Directory.Data
+        });
+  
+        // Web platform only: Load the photo as base64 data
+        photo.webviewPath = `data:image/jpeg;base64,${readFile.data}`;
+      }
+    }
+  }
 
 
   

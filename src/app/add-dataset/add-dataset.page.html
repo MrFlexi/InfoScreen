@@ -18,19 +18,21 @@
     <ion-item>
       <ion-label position="stacked">Created By</ion-label>
       <ion-input [(ngModel)]="dataset.createdBy" name="createdBy"></ion-input>
-    </ion-item>
+    </ion-item>    
     <ion-item>
       <ion-label position="stacked">Picture</ion-label>
-      <ion-input [(ngModel)]="dataset.picture" name="picture"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Picture</ion-label>
-      <ion-button (click)="takePicture()">Take Picture</ion-button>
       <ion-thumbnail *ngIf="dataset.webviewPath">
         <ion-img [src]="dataset.webviewPath"></ion-img>
       </ion-thumbnail>
     </ion-item>
     <ion-button expand="full" type="submit">Save</ion-button>
   </form>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="center">
+    <ion-fab-button size="small" (click)="takePicture()">
+      <ion-icon name="camera-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>
 
