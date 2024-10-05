@@ -24,7 +24,8 @@
       <ion-thumbnail *ngIf="dataset.webviewPath">
         <ion-img [src]="dataset.webviewPath"></ion-img>
       </ion-thumbnail>
-    </ion-item>
+    </ion-item>    
+
     <ion-button expand="full" type="submit">Save</ion-button>
   </form>
 
@@ -33,6 +34,14 @@
       <ion-icon name="camera-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
+  <ion-list *ngFor="let photo_single of photo_array">
+    <ion-item >
+      <ion-thumbnail slot="start">
+        <ion-img [src]="photo_single.webviewPath"></ion-img>        
+      </ion-thumbnail>        
+    </ion-item>
+  </ion-list>
 
 </ion-content>
 
