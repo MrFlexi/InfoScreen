@@ -1,17 +1,18 @@
-// src/app/add-dataset/add-dataset.page.ts
 import { Component } from '@angular/core';
 import { Dataset, ty_Photo } from '../models/dataset.model';  // Import the dataset interface
 import { DataService } from '../services/data.service';
 import { PhotoService } from '../services/photo.service';
 import { NavController } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { OnInit } from '@angular/core';
 
 
 @Component({
-  selector: 'app-add-dataset',
-  templateUrl: './add-dataset.page.html',
-  styleUrls: ['./add-dataset.page.scss'],
+  selector: 'app-edit-dataset',
+  templateUrl: './edit-dataset.page.html',
+  styleUrls: ['./edit-dataset.page.scss'],
 })
-export class AddDatasetPage {
+export class EditDatasetPage {
 
   photo_array: ty_Photo[] = [];
 
@@ -33,8 +34,18 @@ export class AddDatasetPage {
   constructor(
     private dataService: DataService,
     public photoService: PhotoService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private route: ActivatedRoute
   ) {}
+
+  ngOnInit() {
+    // Get the 'dataset' parameter from the URL
+    const id = this.route.snapshot.paramMap.get('id');
+
+    this.dataset = this.dataService.getDatasetById(id);
+
+    console.log('Dataset:', this.dataset.name);
+  }
 
   async takePicture() {
 

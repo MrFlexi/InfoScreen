@@ -2,8 +2,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { NavController } from '@ionic/angular';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { PhotoService } from '../services/photo.service';
+import { Dataset, ty_Photo } from '../models/dataset.model';  // Import the dataset interface
 
 
 @Component({
@@ -22,9 +22,9 @@ export class Tab1Page implements OnInit {
   }
 
 
-  viewImage(dataset: any) {
+  viewImage(id: string) {
     // logic to view image fullscreen
-    this.navCtrl.navigateForward(`/fullscreen/${dataset.picture}`);
+    this.navCtrl.navigateForward(['/edit-dataset', id]);    
   }
 }
 

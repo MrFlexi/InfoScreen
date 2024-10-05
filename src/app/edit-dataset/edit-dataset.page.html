@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Add Dataset</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="saveDataset()">
+    <ion-item>
+      <ion-label position="stacked">Name</ion-label>
+      <ion-input [(ngModel)]="dataset.name" name="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Description</ion-label>
+      <ion-input [(ngModel)]="dataset.description" name="description"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Created By</ion-label>
+      <ion-input [(ngModel)]="dataset.createdBy" name="createdBy"></ion-input>
+    </ion-item>    
+    <ion-item>
+      <ion-label position="stacked">Picture</ion-label>
+      <ion-thumbnail *ngIf="dataset.webviewPath">
+        <ion-img [src]="dataset.webviewPath"></ion-img>
+      </ion-thumbnail>
+    </ion-item>    
+
+    <ion-button expand="full" type="submit">Save</ion-button>
+  </form>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="center">
+    <ion-fab-button size="small" (click)="takePicture()">
+      <ion-icon name="camera-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list *ngFor="let photo_single of photo_array">
+    <ion-item >
+      <ion-thumbnail slot="start">
+        <ion-img [src]="photo_single.webviewPath"></ion-img>        
+      </ion-thumbnail>        
+    </ion-item>
+  </ion-list>
+
+</ion-content>

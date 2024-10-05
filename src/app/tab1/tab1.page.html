@@ -10,7 +10,7 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let dataset of dataService.datasets" (dblclick)="viewImage(dataset)">
+    <ion-item *ngFor="let dataset of dataService.datasets" (dblclick)="viewImage(dataset.id)">
       <ion-thumbnail slot="start">
         <ion-img [src]="dataset.webviewPath"></ion-img>        
       </ion-thumbnail>

@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'add-dataset',
     loadChildren: () => import('./add-dataset/add-dataset.module').then( m => m.AddDatasetPageModule)
+  },
+  {
+    path: 'edit-dataset/:id',
+    loadChildren: () => import('./edit-dataset/edit-dataset.module').then( m => m.EditDatasetPageModule)
   }
 ];
 @NgModule({

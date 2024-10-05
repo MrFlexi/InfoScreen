@@ -58,6 +58,11 @@ export class DataService {
   };
 
 
+  getDatasetById(id: string) {
+    return this.datasets.find(dataset => dataset.id === id);    
+  }
+
+
   private saveDatasets() {
     Filesystem.writeFile({
       path: this.fileName,
