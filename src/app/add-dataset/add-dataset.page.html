@@ -34,14 +34,19 @@
       <ion-icon name="camera-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
-  <ion-list *ngFor="let photo_single of photo_array">
-    <ion-item >
-      <ion-thumbnail slot="start">
-        <ion-img [src]="photo_single.webviewPath"></ion-img>        
-      </ion-thumbnail>        
-    </ion-item>
-  </ion-list>
+  
+  <swiper-container  #swiper
+  slides-per-view="3"
+  grid-rows="1"
+  pagination="true"
+  mousewheel-force-to-axis="true"
+  (afterinit)="swiperReady()"
+  (slidechange)="swiperSlideChanged($event)"
+  >
+    <swiper-slide *ngFor="let photo_single of photo_array">
+       <img [src]="photo_single.webviewPath" class="thumb-img" imageViewer/>
+     </swiper-slide>  
+   </swiper-container>
 
 </ion-content>
 

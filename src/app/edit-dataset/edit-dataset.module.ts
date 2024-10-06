@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { EditDatasetPageRoutingModule } from './edit-dataset-routing.module';
 
 import { EditDatasetPage } from './edit-dataset.page';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { EditDatasetPage } from './edit-dataset.page';
     IonicModule,
     EditDatasetPageRoutingModule
   ],
-  declarations: [EditDatasetPage]
+  declarations: [EditDatasetPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class EditDatasetPageModule {}

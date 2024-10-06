@@ -5,6 +5,8 @@ import { PhotoService } from '../services/photo.service';
 import { NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { OnInit } from '@angular/core';
+import { Swiper } from 'swiper';
+
 
 
 @Component({
@@ -41,9 +43,7 @@ export class EditDatasetPage {
   ngOnInit() {
     // Get the 'dataset' parameter from the URL
     const id = this.route.snapshot.paramMap.get('id');
-
     this.dataset = this.dataService.getDatasetById(id);
-
     console.log('Dataset:', this.dataset.name);
   }
 

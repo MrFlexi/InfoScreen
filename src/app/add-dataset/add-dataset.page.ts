@@ -4,6 +4,9 @@ import { Dataset, ty_Photo } from '../models/dataset.model';  // Import the data
 import { DataService } from '../services/data.service';
 import { PhotoService } from '../services/photo.service';
 import { NavController } from '@ionic/angular';
+import { Swiper } from 'swiper';
+import { ElementRef, ViewChild } from '@angular/core';
+
 
 
 @Component({
@@ -11,7 +14,12 @@ import { NavController } from '@ionic/angular';
   templateUrl: './add-dataset.page.html',
   styleUrls: ['./add-dataset.page.scss'],
 })
+
+
 export class AddDatasetPage {
+  @ViewChild('swiper')
+  swiperRef: ElementRef | undefined;
+  swiper?: Swiper;
 
   photo_array: ty_Photo[] = [];
 
@@ -73,6 +81,22 @@ export class AddDatasetPage {
     this.dataset.photos = this.photo_array;    
     await this.dataService.addDataset(this.dataset);
     this.navCtrl.navigateBack('/tabs/tab1');
+  }
+
+  swiperSlideChanged(e: any) {
+    console.log('changed: ', e);
+  }
+ 
+  swiperReady() {
+    this.swiper = this.swiperRef?.nativeElement.swiper;
+  }
+ 
+  goNext() {
+    this.swiper?.slideNext();
+  }
+ 
+  goPrev() {
+    this.swiper?.slidePrev();
   }
 }
 
