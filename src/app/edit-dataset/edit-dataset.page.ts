@@ -6,6 +6,9 @@ import { NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { Swiper } from 'swiper';
+import { ModalController } from '@ionic/angular';
+import { FullscreenImageComponent } from '../fullscreen-image/fullscreen-image.component';
+
 
 
 
@@ -37,6 +40,7 @@ export class EditDatasetPage {
     private dataService: DataService,
     public photoService: PhotoService,
     private navCtrl: NavController,
+    private modalController: ModalController,
     private route: ActivatedRoute
   ) {}
 
@@ -44,6 +48,7 @@ export class EditDatasetPage {
     // Get the 'dataset' parameter from the URL
     const id = this.route.snapshot.paramMap.get('id');
     this.dataset = this.dataService.getDatasetById(id);
+    this.photo_array = this.dataset.photos;
     console.log('Dataset:', this.dataset.name);
   }
 
@@ -84,6 +89,16 @@ export class EditDatasetPage {
     this.dataset.photos = this.photo_array;    
     await this.dataService.addDataset(this.dataset);
     this.navCtrl.navigateBack('/tabs/tab1');
+  }
+
+  async openImage(imageSrc: string) {
+    const modal = await this.modalController.create({
+      component: FullscreenImageComponent,
+      componentProps: {
+        image: imageSrc
+      }
+    });
+    return await modal.present();
   }
 }
 

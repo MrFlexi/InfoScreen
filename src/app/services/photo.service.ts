@@ -67,17 +67,31 @@ export class PhotoService {
     if (!this.platform.is('hybrid')) {
       console.log("Load Photo hybrid");
       // Display the photo by reading into base64 format
-      for (let photo of datasets) {
+      for (let dataset of datasets) {
         // Read each saved photo's data from the Filesystem
-        console.log("Load Photo" + photo.filepath)  
+        console.log("Load Photo" + dataset.filepath)  
 
         const readFile = await Filesystem.readFile({
-            path: photo.filepath,
+            path: dataset.filepath,
             directory: Directory.Data
-        });
-  
+        });  
         // Web platform only: Load the photo as base64 data
-        photo.webviewPath = `data:image/jpeg;base64,${readFile.data}`;
+        dataset.webviewPath = `data:image/jpeg;base64,${readFile.data}`;
+
+
+        for (let photo_single of dataset.photos) {
+          // Read each saved photo's data from the Filesystem
+          console.log("Load Photo" + photo_single.filepath)  
+  
+          const readFile = await Filesystem.readFile({
+              path: photo_single.filepath,
+              directory: Directory.Data
+          });  
+          // Web platform only: Load the photo as base64 data
+          photo_single.webviewPath = `data:image/jpeg;base64,${readFile.data}`;  
+        }
+
+
       }
     }
   }

@@ -34,12 +34,14 @@
       <ion-icon name="camera-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  
+
   <swiper-container  #swiper
   slides-per-view="3"
   grid-rows="1"
   pagination="true"
+  navigation="true"
   mousewheel-force-to-axis="true"
+  spaceBetween="10"
   (afterinit)="swiperReady()"
   (slidechange)="swiperSlideChanged($event)"
   >
