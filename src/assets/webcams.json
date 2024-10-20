@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "url": "http://example.com/webcam1",
+    "lat": 34.0522,
+    "long": -118.2437,
+    "description": "Webcam in Los Angeles"
+  },
+  {
+    "id": 2,
+    "url": "http://example.com/webcam2",
+    "lat": 40.7128,
+    "long": -74.0060,
+    "description": "Webcam in New York"
+  }
+]
+
+  

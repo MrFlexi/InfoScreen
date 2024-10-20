@@ -22,4 +22,13 @@ export interface Dataset {
     createdAt: string;     // Timestamp of creation (ISO 8601 format)
     photos?: ty_Photo[];
   }
+
+  export interface ty_Webcam {
+    id: number;
+    url: string;
+    lat: number;
+    long: number;
+    description: string;
+  }
+  
   

@@ -13,6 +13,10 @@ const routes: Routes = [
   {
     path: 'edit-dataset/:id',
     loadChildren: () => import('./edit-dataset/edit-dataset.module').then( m => m.EditDatasetPageModule)
+  },
+  {
+    path: 'edit-webcams',
+    loadChildren: () => import('./edit-webcams/edit-webcams.module').then( m => m.EditWebcamsPageModule)
   }
 ];
 @NgModule({

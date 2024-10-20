@@ -1,17 +1,54 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Webcams
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/edit-webcams']">Config</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
+      <ion-title size="large">Tab 2</ion-title>      
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <swiper-container  slides-per-view="1"    
+  navigation="true"
+  pagination="true"  
+  speed="500"
+  autoplay="true"   
+  centeredSlides="true"
+  roundLengths="true"
+  loop="true"
+  mousewheel-force-to-axis="true"
+  spaceBetween="50">
+    <swiper-slide>
+       <img src="https://www.foto-webcam.org/webcam/wallberg/current/1200.jpg"/>
+     </swiper-slide>     
+   
+   <swiper-slide>
+    <img src="https://www.foto-webcam.eu/webcam/malcesine/current/1200.jpg"/>
+  </swiper-slide>  
+
+  <swiper-slide>
+    <img src="https://www.foto-webcam.eu/webcam/herzogstand/current/1200.jpg"/>
+  </swiper-slide>  
+
+  <swiper-slide>
+    <img src="https://www.foto-webcam.org/webcam/wallberg/current/1200.jpg"/>
+  </swiper-slide>  
+
+  <swiper-slide>
+    <div class="image-container">
+      <img src="https://www.dwd.de/DWD/wetter/radar/radfilm_bay_akt.gif" alt="Description of image" />
+    </div>  
+</swiper-slide>
+
+</swiper-container>
+ 
+
 </ion-content>
