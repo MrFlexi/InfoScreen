@@ -3,22 +3,23 @@ import { Injectable } from '@angular/core';
 import { Dataset } from '../models/dataset.model';  // Import the dataset interface
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { PhotoService } from '../services/photo.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
   private fileName = 'datasets.json';
-  public datasets: Dataset[] = [];
+  public datasets: Dataset[] = [];  
 
-  constructor( private photoService: PhotoService,) {
-  this.setup();
+  constructor( private photoService: PhotoService) {
+  this.setup(); 
   }
-
 
   async setup(){
     await this.loadDatasets();
-    await this.photoService.loadAllPictures( this.datasets);  
+    await this.photoService.loadAllPictures( this.datasets);
   }
 
   // Load datasets from filesystem
@@ -80,7 +81,6 @@ export class DataService {
       reader.onerror = reject;
       reader.readAsText(blob);
     });
-  }
-
+  }    
 }
 

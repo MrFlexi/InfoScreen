@@ -1,12 +1,12 @@
-.image-container {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center;    /* Center vertically */
-    height: 100%;           /* Full height to allow vertical centering */
-  }
-  
-  img {
-    max-width: 100%;  /* Responsive width */
-    height: auto;     /* Maintain aspect ratio */
-  }
-  
+
+.map-container {
+  position: absolute;
+  margin: 30px;
+  border: 2px solid blue;
+  height: 500px;
+  width: 100%;
+}
+
+.outer-container {  
+  border: 2px solid red;  
+}

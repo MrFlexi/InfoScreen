@@ -22,17 +22,17 @@
   },
   {
     "id": 4,
-    "url": "https://www.foto-webcam.eu/webcam/sonnenbichl/",
+    "url": "https://schliersbergalm.de/webcam/current.jpg",
     "lat": 40.7128,
     "long": -74.0060,
-    "description": "Sonnenbichl"
+    "description": "Schliersbergalm"
   },
   {
     "id": 5,
     "url": "https://www.dwd.de/DWD/wetter/radar/radfilm_bay_akt.gif",
     "lat": 40.7128,
     "long": -74.0060,
-    "description": "Sonnenbichl"
+    "description": "DWD Wetter Radar"
   }
 ]
 
