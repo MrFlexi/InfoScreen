@@ -26,28 +26,9 @@
   loop="true"
   mousewheel-force-to-axis="true"
   spaceBetween="50">
-    <swiper-slide>
-       <img src="https://www.foto-webcam.org/webcam/wallberg/current/1200.jpg"/>
-     </swiper-slide>     
-   
-   <swiper-slide>
-    <img src="https://www.foto-webcam.eu/webcam/malcesine/current/1200.jpg"/>
-  </swiper-slide>  
-
-  <swiper-slide>
-    <img src="https://www.foto-webcam.eu/webcam/herzogstand/current/1200.jpg"/>
-  </swiper-slide>  
-
-  <swiper-slide>
-    <img src="https://www.foto-webcam.org/webcam/wallberg/current/1200.jpg"/>
-  </swiper-slide>  
-
-  <swiper-slide>
-    <div class="image-container">
-      <img src="https://www.dwd.de/DWD/wetter/radar/radfilm_bay_akt.gif" alt="Description of image" />
-    </div>  
-</swiper-slide>
-
+    <swiper-slide *ngFor="let webcam of webcamService.webcams">
+       <img [src]="webcam.url"/>
+     </swiper-slide>
 </swiper-container>
  
 

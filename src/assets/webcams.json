@@ -1,17 +1,38 @@
 [
   {
     "id": 1,
-    "url": "http://example.com/webcam1",
+    "url": "https://www.foto-webcam.org/webcam/wallberg/current/1200.jpg",
     "lat": 34.0522,
     "long": -118.2437,
-    "description": "Webcam in Los Angeles"
+    "description": "Wallberg"
   },
   {
     "id": 2,
-    "url": "http://example.com/webcam2",
+    "url": "https://www.foto-webcam.eu/webcam/sonnenbichl/current/1200.jpg",
     "lat": 40.7128,
     "long": -74.0060,
-    "description": "Webcam in New York"
+    "description": "Sonnenbichl"
+  },
+  {
+    "id": 3,
+    "url": "https://www.foto-webcam.eu/webcam/herzogstand/current/1200.jpg",
+    "lat": 40.7128,
+    "long": -74.0060,
+    "description": "Herzogstand"
+  },
+  {
+    "id": 4,
+    "url": "https://www.foto-webcam.eu/webcam/sonnenbichl/",
+    "lat": 40.7128,
+    "long": -74.0060,
+    "description": "Sonnenbichl"
+  },
+  {
+    "id": 5,
+    "url": "https://www.dwd.de/DWD/wetter/radar/radfilm_bay_akt.gif",
+    "lat": 40.7128,
+    "long": -74.0060,
+    "description": "Sonnenbichl"
   }
 ]
 

@@ -8,6 +8,6 @@ import { WebcamService } from '../services/webcam.service';
 })
 export class Tab2Page {
 
-  constructor( webcamService: WebcamService) {}
+  constructor( public webcamService: WebcamService) {}
 
 }
