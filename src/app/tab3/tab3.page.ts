@@ -28,9 +28,9 @@ export class Tab3Page implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-  ngAfterViewInit(): void {     
+  ngAfterViewInit(): void {
   }
 
   ngOnDestroy() {
@@ -62,7 +62,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
   }
 
-  ionViewDidLeave() { 
+  ionViewDidLeave() {
   }
 
 
@@ -71,18 +71,24 @@ export class Tab3Page implements OnInit, OnDestroy {
       const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
       this.leafletSetCrosshair(position);
     }
-    else{console.log("NO GPS")}
+    else { console.log("NO GPS") }
   }
 
 
   leafletInit() {
     const position = new Leaflet.LatLng(48.1365, 11.6825);
 
-    this.map = new Leaflet.Map('geoMap').setView(position, 13);    
+    this.map = new Leaflet.Map('geoMap').setView(position, 13);
 
     const tileLayerOnline = Leaflet.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       attribution: 'Online Layer'
     }).addTo(this.map);
+
+    // Listen for the 'moveend' event
+    this.map.on('moveend', (event: Leaflet.LeafletEvent) => {      
+      var center = this.map.getCenter();
+      console.log('Map moved to:',center);      
+    })
 
     // offline baselayer, will use offline source if available
     const tileLayerOffline = L.tileLayerOffline('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
