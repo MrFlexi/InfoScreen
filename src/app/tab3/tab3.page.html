@@ -1,12 +1,35 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>GeoPosition</ion-title>
-  </ion-toolbar>
+<ion-header>  
 </ion-header>
 
-<ion-content class="outer-container">
+<ion-content [fullscreen]="true" class="ion-padding"> 
     <ion-grid>
       <ion-grid>
+        <ion-row>     
+        <ion-col>     
+          <ion-list slot="">            
+            <!--
+            <ion-item>
+              <ion-label>Latitude</ion-label>
+              <ion-badge slot="">{{geoLocation.latitude | number:'1.2-4' }}</ion-badge>
+            </ion-item>
+            <ion-item>
+              <ion-label>Timestamp</ion-label>
+              <ion-badge slot="end">{{geoLocation.timestamp}}</ion-badge>
+            </ion-item>
+            -->
+            <ion-item>
+              <ion-label>Altitude</ion-label>
+              <ion-badge slot="end">{{geoLocation.altitude | number:'1.2-2'}}</ion-badge>
+            </ion-item>
+            <ion-item>
+              <ion-label>Speed in km/h</ion-label>
+              <ion-badge slot="end">{{geoLocation.speed | number:'1.2-2'}}</ion-badge>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+        </ion-row>
+
+
         <ion-row>
             <ion-col size-sm="3">
             <ion-button size="small" fill="solid" (click)="onSave()">Save</ion-button>            
@@ -19,8 +42,6 @@
 
       <ion-row>   
             <div id="geoMap" class="map-container"></div>
-          
-          
       </ion-row>
     </ion-grid>
   </ion-content>

@@ -11,11 +11,11 @@
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>      
+    <ion-toolbar>  
     </ion-toolbar>
   </ion-header>
 
+  <div class="swiper-container">
   <swiper-container  slides-per-view="1"    
   navigation="true"
   pagination="true"  
@@ -27,9 +27,8 @@
   mousewheel-force-to-axis="true"
   spaceBetween="50">
     <swiper-slide *ngFor="let webcam of webcamService.webcams">
-       <img [src]="webcam.url"/>
-     </swiper-slide>
-     <swiper-slide>      
-    </swiper-slide>
+       <img [src]="webcam.url"/>    
+     </swiper-slide>     
 </swiper-container>
+</div>
 </ion-content>

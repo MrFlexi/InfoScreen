@@ -70,6 +70,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     if (this.geoLocation.latitude) {
       const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
       this.leafletSetCrosshair(position);
+      this.leafletSetMarkerOnPosition();
     }
     else { console.log("NO GPS") }
   }
@@ -80,7 +81,7 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     this.map = new Leaflet.Map('geoMap').setView(position, 13);
 
-    const tileLayerOnline = Leaflet.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    const tileLayerOnline = Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Online Layer'
     }).addTo(this.map);
 
@@ -143,9 +144,9 @@ export class Tab3Page implements OnInit, OnDestroy {
       });
       markerCircle.setRadius(40);
       this.map.addLayer(markerCircle);
-      this.map.on('move', function (e) {
-        markerCircle.setLatLng(that.map.getCenter());
-      });
+      //this.map.on('move', function (e) {
+      //  markerCircle.setLatLng(that.map.getCenter());
+      //});
     }
     else console.log('Map not defined');
   }

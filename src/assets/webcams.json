@@ -2,37 +2,42 @@
   {
     "id": 1,
     "url": "https://www.foto-webcam.org/webcam/wallberg/current/1200.jpg",
-    "lat": 34.0522,
-    "long": -118.2437,
-    "description": "Wallberg"
+    "lat": 47.66648191637721,
+    "long": 11.797055271334804,
+    "description": "Wallberg",
+    "direction": 0    
   },
   {
     "id": 2,
     "url": "https://www.foto-webcam.eu/webcam/sonnenbichl/current/1200.jpg",
-    "lat": 40.7128,
-    "long": -74.0060,
-    "description": "Sonnenbichl"
+    "lat": 47.70402096158644, 
+    "long": 11.714862865612995,
+    "description": "Sonnenbichl",
+    "direction": 0
   },
   {
     "id": 3,
     "url": "https://www.foto-webcam.eu/webcam/herzogstand/current/1200.jpg",
-    "lat": 40.7128,
-    "long": -74.0060,
-    "description": "Herzogstand"
+    "lat": 47.61843065085903, 
+    "long": 11.308213907679564,
+    "description": "Herzogstand",
+    "direction": 0
   },
   {
     "id": 4,
     "url": "https://schliersbergalm.de/webcam/current.jpg",
-    "lat": 40.7128,
-    "long": -74.0060,
-    "description": "Schliersbergalm"
+    "lat": 47.740915800835865,
+    "long":  11.874054450811062,
+    "description": "Schliersbergalm",
+    "direction": 0
   },
   {
     "id": 5,
-    "url": "https://www.dwd.de/DWD/wetter/radar/radfilm_bay_akt.gif",
-    "lat": 40.7128,
-    "long": -74.0060,
-    "description": "DWD Wetter Radar"
+    "url": "https://moosburg.humweb.de/cam/cam1.jpg",
+    "lat": 48.4700372884054,
+    "long": 11.937340557013744,
+    "description": "Moosburg",
+    "direction": 0
   }
 ]
 
