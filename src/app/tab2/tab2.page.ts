@@ -10,6 +10,9 @@ import { OnInit, OnDestroy } from '@angular/core';
   styleUrls: ['tab2.page.scss']
 })
 export class Tab2Page implements OnInit, OnDestroy {  
+
+  public timestamp = Date.now();
+
   constructor( public webcamService: WebcamService, public dataService: DataService ) {
 
   }
@@ -18,12 +21,19 @@ export class Tab2Page implements OnInit, OnDestroy {
   ngOnDestroy() { }
   
   ionViewDidEnter() {
-    // Initialize Leaflet Map  
+    console.log("ViewDidEnter")
+    this.refreshImage();
+    
   }
 
   ionViewWillLeave() {    
   }
 
   ionViewDidLeave() {}  
+
+
+  refreshImage() {
+    this.timestamp = Date.now();
+  }
 
 }

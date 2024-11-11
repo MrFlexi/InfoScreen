@@ -1,14 +1,3 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Webcams
-    </ion-title>
-    <ion-buttons slot="end">
-      <ion-button [routerLink]="['/edit-webcams']">Config</ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>  
@@ -16,19 +5,22 @@
   </ion-header>
 
   <div class="swiper-container">
-  <swiper-container  slides-per-view="1"    
-  navigation="true"
-  pagination="true"  
-  speed="500"
-  autoplay="true"   
-  centeredSlides="true"
-  roundLengths="true"
-  loop="true"
-  mousewheel-force-to-axis="true"
-  spaceBetween="50">
-    <swiper-slide *ngFor="let webcam of webcamService.webcams">
-       <img [src]="webcam.url"/>    
+    <swiper-container  slides-per-view="1"    
+      navigation="true"
+      pagination="true"  
+      speed="500"
+      autoplay="true"   
+      centeredSlides="true"
+      roundLengths="true"
+      loop="true"
+      mousewheel-force-to-axis="true"
+      spaceBetween="50">
+      <swiper-slide *ngFor="let webcam of webcamService.webcams">
+        <div class="overlay">
+          <p class="overlay-text">{{webcam.description}}</p>
+        </div>      
+      <img [src]="webcam.url + '?t=' + timestamp"/>    
      </swiper-slide>     
-</swiper-container>
-</div>
+    </swiper-container>
+  </div>
 </ion-content>

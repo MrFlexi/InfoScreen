@@ -1,12 +1,44 @@
 
 .map-container {
-  position: absolute;
-  margin: 30px;
+  display: grid;
+  place-items: center;  /* centers both horizontally and vertically */
+  height: 100vh;  
+  margin: 5px;
   border: 2px solid blue;
-  height: 500px;
-  width: 80%;
+
 }
 
 .outer-container {  
   border: 2px solid red;  
+}
+
+
+ /* Position the overlay text container on top of the image */
+ .overlay {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.3); /* semi-transparent background */
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  color: white;
+}
+
+.overlay-text {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.speed-control {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 36px;
+  font-weight: bold;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 }

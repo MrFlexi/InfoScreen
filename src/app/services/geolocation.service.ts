@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Geolocation, Position} from '@capacitor/geolocation';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
 })
+
+
+
 export class GeolocationService {
 latitude: any;
 longitude: any;
 speed: any;
 altitude: any;
-timestamp: any;
+timestamp: string;
 
 public geoTicker: Observable<any>;
 
-constructor() {
+constructor(public toastCtrl: ToastController) {
 
   if (!Geolocation.checkPermissions())
   {
@@ -28,13 +32,13 @@ constructor() {
     // Simple geolocation API check provides values to publish
     if ('geolocation' in navigator) {
       watchId = Geolocation.watchPosition({}, (position, err) => {
-        console.log('Watch', position);
+        console.log('GPSService update received', position);
         this.latitude = position?.coords.latitude;
         this.longitude = position?.coords.longitude;
         this.speed = position?.coords.speed;
         this.altitude = position?.coords.altitude;
-        this.timestamp = position?.timestamp;
-
+        //this.timestamp = this.datePipe.transform(position?.timestamp, 'yyyy-MM-dd HH:mm:ss');
+        this.timestamp = position?.timestamp.toString();
         observer.next(position);    // Bradcast actual position
       });
     }
@@ -57,5 +61,14 @@ constructor() {
   this.longitude = coordinates.coords.longitude;
   this.speed = coordinates.coords.speed;
  }
+
+ async showToast(msg: string) {
+  const toast = await this.toastCtrl.create({
+    message: msg,
+    position: 'top',
+    duration: 1000
+  });
+  toast.present();
+}
 
 }

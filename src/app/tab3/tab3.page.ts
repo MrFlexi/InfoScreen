@@ -5,7 +5,9 @@ import { GeolocationService } from '../services/geolocation.service';
 import { OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as Leaflet from 'leaflet';
+import 'leaflet-routing-machine';
 import * as L from 'leaflet.offline';
+
 
 @Component({
   selector: 'app-tab3',
@@ -18,8 +20,12 @@ export class Tab3Page implements OnInit, OnDestroy {
   layer: Leaflet.Layer
   message = '';
   currentUser = '';
+  checkboxTrack: boolean = false;
   private locationLayerGroup = new Leaflet.LayerGroup();
   private trackLayerGroup = new Leaflet.LayerGroup();
+  private speedControl = new Leaflet.Control({ position: 'topright' });  // Leaflet control to display speed
+
+
   private subscriptions: Subscription[] = [];
 
 
@@ -34,9 +40,6 @@ export class Tab3Page implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.map) {
-      this.map.remove();
-    }
   }
 
   ionViewDidEnter() {
@@ -57,22 +60,9 @@ export class Tab3Page implements OnInit, OnDestroy {
   ionViewWillLeave() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
     console.log('unsubscribed');
-    if (this.map) {
-      this.map.remove();
-    }
   }
 
   ionViewDidLeave() {
-  }
-
-
-  updateGpsMapPosition() {
-    if (this.geoLocation.latitude) {
-      const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
-      this.leafletSetCrosshair(position);
-      this.leafletSetMarkerOnPosition();
-    }
-    else { console.log("NO GPS") }
   }
 
 
@@ -85,10 +75,28 @@ export class Tab3Page implements OnInit, OnDestroy {
       attribution: 'Online Layer'
     }).addTo(this.map);
 
+    //
+    //Leaflet.Routing.control({
+    //  waypoints: [
+    //    Leaflet.latLng(48.00, 11.00),
+    //    Leaflet.latLng(47.00, 11.00)
+    //  ]
+    //}).addTo(this.map);
+
+    // Create a custom control to show the speed
+     this.speedControl.onAdd = () => {
+      const div = Leaflet.DomUtil.create('div', 'speed-control');
+      div.innerHTML = `<b>Speed: </b><span id="speed">0 km/h</span>`;
+       return div;
+      };
+       this.speedControl.addTo(this.map);
+     
+
+
     // Listen for the 'moveend' event
-    this.map.on('moveend', (event: Leaflet.LeafletEvent) => {      
+    this.map.on('moveend', (event: Leaflet.LeafletEvent) => {
       var center = this.map.getCenter();
-      console.log('Map moved to:',center);      
+      console.log('Map moved to:', center);
     })
 
     // offline baselayer, will use offline source if available
@@ -131,6 +139,27 @@ export class Tab3Page implements OnInit, OnDestroy {
     ).addTo(this.map);
   }
 
+
+  leafletSetBottle(position: any, layer: Leaflet.LayerGroup) {
+    if (this.map) {
+      console.log('Map Position updated');
+      const that = this;
+
+      // Add in a crosshair for the map
+      const bottleIcon = Leaflet.icon({
+        iconUrl: '../../../../assets/icon/bottle.png',
+        iconSize: [20, 20], // size of the icon
+        iconAnchor: [10, 10], // point of the icon which will correspond to marker's location
+      });
+      const bottle = Leaflet.marker(position, { icon: bottleIcon });
+      this.trackLayerGroup.addLayer(bottle);
+      //this.map.addLayer(layer);
+    }
+    else console.log('Map not defined');
+  }
+
+
+
   leafletSetCrosshair(position: any) {
     if (this.map) {
       const that = this;
@@ -151,13 +180,47 @@ export class Tab3Page implements OnInit, OnDestroy {
     else console.log('Map not defined');
   }
 
+
+  updateGpsMapPosition() {
+    if (this.geoLocation.latitude) {
+      const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
+      //this.leafletSetCrosshair(position);
+      //if (this.checkboxTrack)
+      //{
+      this.leafletSetMarkerOnPosition();
+      //}
+
+    }
+    else { console.log("NO GPS") }
+  }
+
+
+  leafletCenterOnPosition() {
+    if (this.geoLocation.latitude) {
+      const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
+      console.log('center on position');
+      if (this.map) {
+        this.map.setView(position, 16);
+        this.leafletSetBottle(position, this.trackLayerGroup)
+      }
+      else console.log('Map not defined');
+    }
+    else 
+    { 
+      console.log('No GPS info available');
+      this.geoLocation.showToast("No GPS info available") 
+    }
+  }
+
+
   leafletSetMarkerOnPosition() {
     const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
     console.log('set marker');
     if (this.map) {
-      this.map.setView(position, 16);
-      var marker = Leaflet.marker(position).addTo(this.map);
-      this.map.addLayer(marker);
+      //this.map.setView(position, 16);
+      this.leafletSetBottle(position, this.trackLayerGroup)
+      //var marker = Leaflet.marker(position).addTo(this.map);
+      //this.map.addLayer(marker);
     }
     else console.log('Map not defined');
   }
@@ -173,8 +236,14 @@ export class Tab3Page implements OnInit, OnDestroy {
 
   onGeoPosUpdate() {
     this.updateGpsMapPosition();
+    this.updateSpeedDisplay(this.geoLocation.speed)
   }
 
-
+  updateSpeedDisplay(speedInKmH: number) {
+    const speedElement = document.getElementById('speed');
+    if (speedElement) {
+      speedElement.innerText = speedInKmH.toFixed(2) + ' km/h';
+    }
+  }
 
 }

@@ -1,13 +1,13 @@
 <ion-header>  
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding"> 
-    <ion-grid>
-      <ion-grid>
+<ion-content [fullscreen]="true" class="outer-container"> 
+   <!--
+    <ion-grid >  
         <ion-row>     
         <ion-col>     
           <ion-list slot="">            
-            <!--
+           
             <ion-item>
               <ion-label>Latitude</ion-label>
               <ion-badge slot="">{{geoLocation.latitude | number:'1.2-4' }}</ion-badge>
@@ -16,32 +16,39 @@
               <ion-label>Timestamp</ion-label>
               <ion-badge slot="end">{{geoLocation.timestamp}}</ion-badge>
             </ion-item>
-            -->
+     
             <ion-item>
               <ion-label>Altitude</ion-label>
               <ion-badge slot="end">{{geoLocation.altitude | number:'1.2-2'}}</ion-badge>
+              <ion-badge slot="end">{{geoLocation.timestamp | number:'1.2-2'}}</ion-badge>
             </ion-item>
             <ion-item>
               <ion-label>Speed in km/h</ion-label>
               <ion-badge slot="end">{{geoLocation.speed | number:'1.2-2'}}</ion-badge>
             </ion-item>
+            <ion-item>
+              <ion-checkbox [(ngModel)]="checkboxTrack" id="checkboxTrack" justify="start" label-placement="start">Track</ion-checkbox>
+            </ion-item>
+                 
+
           </ion-list>
-        </ion-col>
+        </ion-col>        
         </ion-row>
-
-
         <ion-row>
-            <ion-col size-sm="3">
-            <ion-button size="small" fill="solid" (click)="onSave()">Save</ion-button>            
-            <ion-button size="small" (click)="onGeoPosUpdate()">
+            <ion-col size-sm="3">        
+              <ion-button size="small" fill="solid" (click)="onSave()">Save</ion-button>            
+          
+            <ion-button size="small" (click)="leafletCenterOnPosition()">
             <ion-icon name="locate-outline"></ion-icon>
             </ion-button>
           </ion-col>
-        </ion-row>
-      </ion-grid>
-
-      <ion-row>   
-            <div id="geoMap" class="map-container"></div>
+        </ion-row>    
+      <ion-row >   
+      -->   
+            <div id="geoMap" class="map-container">              
+            </div>
+      <!--
       </ion-row>
     </ion-grid>
+    -->      
   </ion-content>
