@@ -38,18 +38,7 @@ export class Tab3Page implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() { 
-
-    // Suscribe to GPS updates
-    this.locationSubscription = this.geoLocation.getLocationUpdates().subscribe({
-      next: (position: Position) => {
-        console.log('New 2 GPS update');
-        this.updateGpsMapPosition();
-      },
-      error: (error) => {
-        //this.errorMessage = error;
-      },
-    });
+  ngOnInit() {
   }
 
   ngAfterViewInit(): void {
@@ -62,14 +51,21 @@ export class Tab3Page implements OnInit, OnDestroy {
     if (this.map) {
       this.map.remove(); // Clean up the existing map instance
     }
-
     this.leafletInit();
-    //this.subscriptions.push(
-    //  // Subscribe on GPS position updates
-    //  this.geoLocation.geoTicker.subscribe((next) => {       
-    //    this.updateGpsMapPosition();
-    //  })
-    //);    
+
+    this.subscriptions.push(
+      // Subscribe on GPS position updates      
+      this.locationSubscription = this.geoLocation.getLocationUpdates().subscribe({
+        next: (position: Position) => {
+          console.log('New 2 GPS update');
+          this.updateGpsMapPosition();
+        },
+        error: (error) => {
+          //this.errorMessage = error;
+        },
+      })
+    );
+
   }
 
   ionViewWillLeave() {
@@ -176,8 +172,7 @@ export class Tab3Page implements OnInit, OnDestroy {
   leafletSetCrosshair(position: any) {
     if (this.map) {
       const that = this;
-      console.log('Map Crosshair updated', position);
-      this.map.setView(position, 16);
+      console.log('Map Crosshair updated', position);      
       const markerCircle = Leaflet.circleMarker(position, {
         color: 'orange',
         fillColor: '#f03',
@@ -200,11 +195,14 @@ export class Tab3Page implements OnInit, OnDestroy {
     if (this.geoLocation.latitude) {
       const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
 
-      if (this.checkboxFollowMe) {      "Center map on position"
+      if (this.checkboxFollowMe) {
+        "Center map on position"
         this.leafletCenterOnPosition();
+        this.leafletSetCrosshair(position);
       }
 
-      if (this.checkboxSetTrack) {      "Set a position icon"
+      if (this.checkboxSetTrack) {
+        "Set a position icon"
         this.leafletSetMarkerOnPosition();
       }
 
