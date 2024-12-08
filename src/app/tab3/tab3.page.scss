@@ -2,14 +2,18 @@
 .map-container {
   display: grid;
   place-items: center;  /* centers both horizontally and vertically */
-  height: 100vh;  
+  height: 80vh;  
   margin: 5px;
-  border: 2px solid blue;
+  //border: 2px solid blue;
 
 }
 
-.outer-container {  
-  border: 2px solid red;  
+.outer-container {      
+  //border: 2px solid red;  
+}
+
+.row {      
+  //border: 2px solid peru;  
 }
 
 

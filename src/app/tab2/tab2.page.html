@@ -1,25 +1,24 @@
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>  
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true"> 
 
   <div class="swiper-container">
     <swiper-container  slides-per-view="1"    
       navigation="true"
       pagination="true"  
       speed="500"
+      disableOnInteraction="false"      
       autoplay="true"   
       centeredSlides="true"
       roundLengths="true"
-      loop="true"
+      loop="true"      
       mousewheel-force-to-axis="true"
       spaceBetween="50">
-      <swiper-slide *ngFor="let webcam of webcamService.webcams">
+      <swiper-slide  class="swiper-slide" *ngFor="let webcam of webcamService.webcams">
         <div class="overlay">
           <p class="overlay-text">{{webcam.description}}</p>
-        </div>      
+        </div>
+        <div class="fullscreen-image">
       <img [src]="webcam.url + '?t=' + timestamp"/>    
+    </div>      
      </swiper-slide>     
     </swiper-container>
   </div>

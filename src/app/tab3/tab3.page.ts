@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { WebcamService } from '../services/webcam.service';
 import { DataService } from '../services/data.service';
 import { GeolocationService } from '../services/geolocation.service';
+import { Position } from '@capacitor/geolocation';
 import { OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as Leaflet from 'leaflet';
@@ -21,10 +22,13 @@ export class Tab3Page implements OnInit, OnDestroy {
   message = '';
   currentUser = '';
   checkboxTrack: boolean = false;
+  checkboxFollowMe: boolean = true;
+  checkboxSetTrack: boolean = true;
   private locationLayerGroup = new Leaflet.LayerGroup();
   private trackLayerGroup = new Leaflet.LayerGroup();
   private speedControl = new Leaflet.Control({ position: 'topright' });  // Leaflet control to display speed
 
+  private locationSubscription: Subscription | null = null;
 
   private subscriptions: Subscription[] = [];
 
@@ -34,7 +38,19 @@ export class Tab3Page implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+
+    // Suscribe to GPS updates
+    this.locationSubscription = this.geoLocation.getLocationUpdates().subscribe({
+      next: (position: Position) => {
+        console.log('New 2 GPS update');
+        this.updateGpsMapPosition();
+      },
+      error: (error) => {
+        //this.errorMessage = error;
+      },
+    });
+  }
 
   ngAfterViewInit(): void {
   }
@@ -48,13 +64,12 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
 
     this.leafletInit();
-    this.subscriptions.push(
-      // Subscribe on GPS position updates
-      this.geoLocation.geoTicker.subscribe((next) => {
-        console.log('GPS subscribed');
-        this.updateGpsMapPosition();
-      })
-    );
+    //this.subscriptions.push(
+    //  // Subscribe on GPS position updates
+    //  this.geoLocation.geoTicker.subscribe((next) => {       
+    //    this.updateGpsMapPosition();
+    //  })
+    //);    
   }
 
   ionViewWillLeave() {
@@ -84,14 +99,12 @@ export class Tab3Page implements OnInit, OnDestroy {
     //}).addTo(this.map);
 
     // Create a custom control to show the speed
-     this.speedControl.onAdd = () => {
+    this.speedControl.onAdd = () => {
       const div = Leaflet.DomUtil.create('div', 'speed-control');
       div.innerHTML = `<b>Speed: </b><span id="speed">0 km/h</span>`;
-       return div;
-      };
-       this.speedControl.addTo(this.map);
-     
-
+      return div;
+    };
+    this.speedControl.addTo(this.map);
 
     // Listen for the 'moveend' event
     this.map.on('moveend', (event: Leaflet.LeafletEvent) => {
@@ -181,14 +194,19 @@ export class Tab3Page implements OnInit, OnDestroy {
   }
 
 
+  // Is called whenever a new GPS position is received
   updateGpsMapPosition() {
+    this.geoLocation.showToast("updateGpsMapPosition")
     if (this.geoLocation.latitude) {
       const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
-      //this.leafletSetCrosshair(position);
-      //if (this.checkboxTrack)
-      //{
-      this.leafletSetMarkerOnPosition();
-      //}
+
+      if (this.checkboxFollowMe) {      "Center map on position"
+        this.leafletCenterOnPosition();
+      }
+
+      if (this.checkboxSetTrack) {      "Set a position icon"
+        this.leafletSetMarkerOnPosition();
+      }
 
     }
     else { console.log("NO GPS") }
@@ -201,14 +219,12 @@ export class Tab3Page implements OnInit, OnDestroy {
       console.log('center on position');
       if (this.map) {
         this.map.setView(position, 16);
-        this.leafletSetBottle(position, this.trackLayerGroup)
       }
       else console.log('Map not defined');
     }
-    else 
-    { 
+    else {
       console.log('No GPS info available');
-      this.geoLocation.showToast("No GPS info available") 
+      this.geoLocation.showToast("No GPS info available")
     }
   }
 
@@ -217,7 +233,6 @@ export class Tab3Page implements OnInit, OnDestroy {
     const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
     console.log('set marker');
     if (this.map) {
-      //this.map.setView(position, 16);
       this.leafletSetBottle(position, this.trackLayerGroup)
       //var marker = Leaflet.marker(position).addTo(this.map);
       //this.map.addLayer(marker);
@@ -244,6 +259,16 @@ export class Tab3Page implements OnInit, OnDestroy {
     if (speedElement) {
       speedElement.innerText = speedInKmH.toFixed(2) + ' km/h';
     }
+  }
+
+  leafletBTFollowMe() {
+    console.log('FollowMe toggled');
+    console.log(this.checkboxFollowMe)
+  }
+
+  leafletBTSetTrack() {
+    console.log('Track toggled');
+    console.log(this.checkboxSetTrack)
   }
 
 }

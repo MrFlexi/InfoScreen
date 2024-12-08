@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Geolocation, Position} from '@capacitor/geolocation';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ToastController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,49 +11,66 @@ import { ToastController } from '@ionic/angular';
 
 
 export class GeolocationService {
-latitude: any;
-longitude: any;
 speed: any;
 altitude: any;
 timestamp: string;
+latitude: number | null = null;
+longitude: number | null = null;
+errorMessage: string | null = null;
 
 public geoTicker: Observable<any>;
 
+private locationSubscription: Subscription | null = null;
+
 constructor(public toastCtrl: ToastController) {
 
+  console.log('Service constructor');
   if (!Geolocation.checkPermissions())
   {
     console.log('GPS request position');
     Geolocation.requestPermissions();
   }
+
   
+  this.locationSubscription = this.getLocationUpdates().subscribe({
+    next: (position: Position) => {
+      console.log('New 2 GPS update', position);
+      this.latitude =   position?.coords.latitude;
+      this.longitude =  position?.coords.longitude;
+      this.speed =      position?.coords.speed;
+      this.altitude =   position?.coords.altitude;
+    },
+    error: (error) => {
+      this.errorMessage = error;
+    },
+  });
 
-  this.geoTicker = new Observable((observer) => {
-    let watchId: any;
+  //this.geoTicker = new Observable((observer) => {
+  //  let watchId: any;
     // Simple geolocation API check provides values to publish
-    if ('geolocation' in navigator) {
-      watchId = Geolocation.watchPosition({}, (position, err) => {
-        console.log('GPSService update received', position);
-        this.latitude = position?.coords.latitude;
-        this.longitude = position?.coords.longitude;
-        this.speed = position?.coords.speed;
-        this.altitude = position?.coords.altitude;
-        //this.timestamp = this.datePipe.transform(position?.timestamp, 'yyyy-MM-dd HH:mm:ss');
-        this.timestamp = position?.timestamp.toString();
-        observer.next(position);    // Bradcast actual position
-      });
-    }
-    else
-    {
-      console.log('The browser does not support geolocation');
-    }
-  });
+  //  if ('geolocation' in navigator) {
+  //    watchId = Geolocation.watchPosition({}, (position, errorHandler) => {
+  //      console.log('GPSService update received', position);
+  //      this.latitude = position?.coords.latitude;
+  //      this.longitude = position?.coords.longitude;
+  //      this.speed = position?.coords.speed;
+  //      this.altitude = position?.coords.altitude;
+  //      //this.timestamp = this.datePipe.transform(position?.timestamp, 'yyyy-MM-dd HH:mm:ss');
+  //      this.timestamp = position?.timestamp.toString();
+  //      observer.next(position);    // Bradcast actual position
+  //    });
+  //  }
+  //  else
+  //  {
+  //    console.log('The browser does not support geolocation');
+  //  }
+  //});
 
-  this.geoTicker.subscribe({
-    next(position){
-      console.log('Position Update: ', position);      
-    }
-  });
+  //this.geoTicker.subscribe({
+  //  next(position){
+  //    console.log('Position Update: ', position);      
+  //  }
+  //});
  }
 
  async getGeolocation(){
@@ -70,5 +88,29 @@ constructor(public toastCtrl: ToastController) {
   });
   toast.present();
 }
+
+
+getLocationUpdates(): Observable<Position> {
+  return new Observable<Position>((observer) => {
+    // Watch the user's position
+    const watchId = Geolocation.watchPosition(
+      { enableHighAccuracy: true },
+      (position, error) => {
+        if (error) {
+          observer.error('Error watching location: ' + error.message);
+        } else if (position) {
+          observer.next(position); // Emit the position
+        }
+      }
+    );
+
+    // Cleanup logic for when the observable is unsubscribed
+    return () => {
+      //Geolocation.clearWatch();
+    };
+  });
+}
+
+
 
 }
