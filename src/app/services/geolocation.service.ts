@@ -36,7 +36,6 @@ constructor(public toastCtrl: ToastController) {
       this.longitude =  position?.coords.longitude;
       this.speed =      position?.coords.speed;
       this.altitude =   position?.coords.altitude;
-      console.log('API Subscription Altitude', this.altitude);
     },
     error: (error) => {
       this.errorMessage = error;
@@ -71,7 +70,7 @@ getLocationUpdates(): Observable<Position> {
           observer.error('Error watching location: ' + error.message);
         } else if (position) {
           observer.next(position); // Emit the position
-          console.log('API GPS modul update', position.coords.altitude);
+          console.log('API GPS update emitted', position.coords.altitude);
         }
       }
     );

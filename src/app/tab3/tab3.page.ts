@@ -5,6 +5,7 @@ import { GeolocationService } from '../services/geolocation.service';
 import { Position } from '@capacitor/geolocation';
 import { OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Platform } from '@ionic/angular'
 import * as Leaflet from 'leaflet';
 import 'leaflet-routing-machine';
 import * as L from 'leaflet.offline';
@@ -31,7 +32,36 @@ export class Tab3Page implements OnInit, OnDestroy {
 
 
   constructor(public geoLocation: GeolocationService,
-    public dataService: DataService) {
+    public dataService: DataService, private platform: Platform) {
+
+      this.platform.pause.subscribe(() => {
+        console.log('App is going to background');
+        // Handle app pause, clean up if necessary
+      });
+
+      this.platform.resume.subscribe(() => {
+        console.log('App is resuming');
+        this.restartSubscriptions();
+      });
+
+  }
+
+  restartSubscriptions() {
+    // Reinitialize subscriptions here
+    console.log('Restarting subscriptions...');
+    console.log('UI subscribe to GPS');  
+    this.subscriptions.push(
+      // Subscribe on GPS position updates    
+      this.geoLocation.getLocationUpdates().subscribe({
+        next: (position: Position) => {
+          console.log('UI GPS update received');
+          this.updateGpsMapPosition();
+        },
+        error: (error) => {
+          console.log('Subscription error');
+        },
+      })
+    );
   }
 
   ngOnInit() {
@@ -52,21 +82,7 @@ export class Tab3Page implements OnInit, OnDestroy {
       this.map.remove(); // Clean up the existing map instance
     }
     this.leafletInit();
-
-    console.log('UI subscribe to GPS');  
-    this.subscriptions.push(
-      // Subscribe on GPS position updates    
-      this.geoLocation.getLocationUpdates().subscribe({
-        next: (position: Position) => {
-          console.log('UI GPS update received');
-          this.updateGpsMapPosition();
-        },
-        error: (error) => {
-          console.log('Subscription error');
-        },
-      })
-    );
-
+    this.restartSubscriptions();
   }
 
   ionViewWillLeave() {
