@@ -11,10 +11,10 @@ import { Subscription } from 'rxjs';
 
 export class GeolocationService {
 speed: any;
-altitude: any;
 timestamp: string;
 latitude: number | null = null;
 longitude: number | null = null;
+altitude: number | null = null;
 errorMessage: string | null = null;
 
 private locationSubscription: Subscription | null = null;
@@ -31,11 +31,12 @@ constructor(public toastCtrl: ToastController) {
   
   this.locationSubscription = this.getLocationUpdates().subscribe({
     next: (position: Position) => {
-      console.log('New 2 GPS update', position);
+      console.log('API subscription GPS update', position);
       this.latitude =   position?.coords.latitude;
       this.longitude =  position?.coords.longitude;
       this.speed =      position?.coords.speed;
       this.altitude =   position?.coords.altitude;
+      console.log('API Subscription Altitude', this.altitude);
     },
     error: (error) => {
       this.errorMessage = error;
@@ -70,6 +71,7 @@ getLocationUpdates(): Observable<Position> {
           observer.error('Error watching location: ' + error.message);
         } else if (position) {
           observer.next(position); // Emit the position
+          console.log('API GPS modul update', position.coords.altitude);
         }
       }
     );

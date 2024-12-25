@@ -49,13 +49,13 @@
 
     <ion-row class="row">
       <ion-col>
-        <ion-toggle [checked]="true" (ionChange)="leafletBTFollowMe()" [(ngModel)]="checkboxFollowMe">FollowMe!</ion-toggle>
+        <ion-toggle [checked]="true" (ionChange)="leafletBTCenterOnPosition()" [(ngModel)]="checkboxCenterOnPosition">Center</ion-toggle>
         <ion-toggle [checked]="true" (ionChange)="leafletBTSetTrack()" [(ngModel)]="checkboxSetTrack">Track</ion-toggle>
       </ion-col>
       <ion-col>  
 
         <ion-fab>
-          <ion-fab-button size="small" (click)="leafletCenterOnPosition()">
+          <ion-fab-button size="small" (click)="onBTCenter()">
             <ion-icon name="locate-outline"></ion-icon>
           </ion-fab-button>
           <ion-fab-list side="end">

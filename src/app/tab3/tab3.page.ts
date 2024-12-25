@@ -22,46 +22,47 @@ export class Tab3Page implements OnInit, OnDestroy {
   message = '';
   currentUser = '';
   checkboxTrack: boolean = false;
-  checkboxFollowMe: boolean = true;
+  checkboxCenterOnPosition: boolean = true;
   checkboxSetTrack: boolean = true;
   private locationLayerGroup = new Leaflet.LayerGroup();
   private trackLayerGroup = new Leaflet.LayerGroup();
   private speedControl = new Leaflet.Control({ position: 'topright' });  // Leaflet control to display speed
-
-  private locationSubscription: Subscription | null = null;
-
   private subscriptions: Subscription[] = [];
 
 
   constructor(public geoLocation: GeolocationService,
     public dataService: DataService) {
-
   }
 
   ngOnInit() {
+    console.log('ngOnInit');
   }
 
   ngAfterViewInit(): void {
+    console.log('ngAfterViewInit');
   }
 
   ngOnDestroy() {
+    console.log('ngOnDestroy');
   }
 
-  ionViewDidEnter() {
+  ionViewWillEnter() {
+    console.log('ionViewWillEnterter');
     if (this.map) {
       this.map.remove(); // Clean up the existing map instance
     }
     this.leafletInit();
 
+    console.log('UI subscribe to GPS');  
     this.subscriptions.push(
-      // Subscribe on GPS position updates      
-      this.locationSubscription = this.geoLocation.getLocationUpdates().subscribe({
+      // Subscribe on GPS position updates    
+      this.geoLocation.getLocationUpdates().subscribe({
         next: (position: Position) => {
-          console.log('New 2 GPS update');
+          console.log('UI GPS update received');
           this.updateGpsMapPosition();
         },
         error: (error) => {
-          //this.errorMessage = error;
+          console.log('Subscription error');
         },
       })
     );
@@ -69,11 +70,12 @@ export class Tab3Page implements OnInit, OnDestroy {
   }
 
   ionViewWillLeave() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
-    console.log('unsubscribed');
+ 
   }
 
   ionViewDidLeave() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    console.log('UI unsubscribed');
   }
 
 
@@ -97,7 +99,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     // Create a custom control to show the speed
     this.speedControl.onAdd = () => {
       const div = Leaflet.DomUtil.create('div', 'speed-control');
-      div.innerHTML = `<b>Speed: </b><span id="speed">0 km/h</span>`;
+      div.innerHTML = `<b>Alt: </b><span id="alt">0 m</span> <b>Speed: </b><span id="speed">0 km/h</span>`;
       return div;
     };
     this.speedControl.addTo(this.map);
@@ -191,12 +193,13 @@ export class Tab3Page implements OnInit, OnDestroy {
 
   // Is called whenever a new GPS position is received
   updateGpsMapPosition() {
-    this.geoLocation.showToast("updateGpsMapPosition")
+    this.geoLocation.showToast("GPS update...")
     if (this.geoLocation.latitude) {
       const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
+      this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
 
-      if (this.checkboxFollowMe) {
-        "Center map on position"
+      if (this.checkboxCenterOnPosition) {
+        console.log('Center on position');
         this.leafletCenterOnPosition();
         this.leafletSetCrosshair(position);
       }
@@ -249,19 +252,34 @@ export class Tab3Page implements OnInit, OnDestroy {
 
   onGeoPosUpdate() {
     this.updateGpsMapPosition();
-    this.updateSpeedDisplay(this.geoLocation.speed)
+    this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
   }
 
-  updateSpeedDisplay(speedInKmH: number) {
+  onBTCenter(){
+    if (this.geoLocation.latitude) {
+      const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
+        "Center map on position"
+        this.leafletCenterOnPosition();
+        this.leafletSetCrosshair(position);
+        this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
+      }
+  }
+
+  updateDisplay(speedInKmH: number, alt:number) {
     const speedElement = document.getElementById('speed');
     if (speedElement) {
       speedElement.innerText = speedInKmH.toFixed(2) + ' km/h';
     }
+
+    const altElement = document.getElementById('alt');
+    if (altElement) {
+      altElement.innerText = alt.toFixed(4) + ' m';
+    }
   }
 
-  leafletBTFollowMe() {
+  leafletBTCenterOnPosition() {
     console.log('FollowMe toggled');
-    console.log(this.checkboxFollowMe)
+    console.log(this.checkboxCenterOnPosition)
   }
 
   leafletBTSetTrack() {
