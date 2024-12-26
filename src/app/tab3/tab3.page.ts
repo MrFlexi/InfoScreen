@@ -47,6 +47,10 @@ export class Tab3Page implements OnInit, OnDestroy {
 
   }
 
+  // -------------------------------------------------------------------------//
+  // Subscribe to GPS updates
+  // -------------------------------------------------------------------------//
+
   restartSubscriptions() {
     // Reinitialize subscriptions here
     console.log('Restarting subscriptions...');
@@ -65,6 +69,31 @@ export class Tab3Page implements OnInit, OnDestroy {
     );
   }
 
+  // React on GPS updates
+  updateGpsMapPosition(gps: Position) {
+    var timestrg = new Date(gps.timestamp).toLocaleTimeString("de-DE")
+    this.geoLocation.showToast("GPS update..." + timestrg)
+    if (this.geoLocation.latitude) {
+      const position = new Leaflet.LatLng(gps.coords.latitude, gps.coords.longitude );
+      this.updateDisplay(gps.coords.speed, gps.coords.speed)
+      
+      if (this.checkboxCenterOnPosition) {
+        console.log('Center on position');
+        this.leafletCenterOnPosition(position);
+        this.leafletSetCrosshair(position);
+      }
+      
+      if (this.checkboxSetTrack) {
+        "Set a position icon"
+        this.leafletSetWayPoint(position, this.trackLayerGroup)
+      }
+    }
+    else { console.log("NO GPS") }
+  }
+
+  // -------------------------------------------------------------------------//
+  // Framework events
+  // -------------------------------------------------------------------------//
   ngOnInit() {
     console.log('ngOnInit');
   }
@@ -96,6 +125,9 @@ export class Tab3Page implements OnInit, OnDestroy {
   }
 
 
+  // -------------------------------------------------------------------------//
+  // Leaflet map integration
+  // -------------------------------------------------------------------------//
 
   leafletInit() {
     const position = new Leaflet.LatLng(48.1365, 11.6825);
@@ -219,32 +251,6 @@ export class Tab3Page implements OnInit, OnDestroy {
     else console.log('Map not defined');
   }
 
-  // -------------------------------------------------------------------------//
-  // Is called whenever a new GPS position is received
-  // -------------------------------------------------------------------------//
-  updateGpsMapPosition(gps_position: Position) {
-    var s = new Date(gps_position.timestamp).toLocaleTimeString("de-DE")
-    this.geoLocation.showToast("GPS update..." + s)
-    if (this.geoLocation.latitude) {
-      const position = new Leaflet.LatLng(gps_position.coords.latitude, gps_position.coords.longitude );
-      this.updateDisplay(gps_position.coords.speed, gps_position.coords.speed)
-
-      if (this.checkboxCenterOnPosition) {
-        console.log('Center on position');
-        this.leafletCenterOnPosition(position);
-        this.leafletSetCrosshair(position);
-      }
-
-      if (this.checkboxSetTrack) {
-        "Set a position icon"
-        this.leafletSetWayPoint(position, this.trackLayerGroup)
-      }
-
-    }
-    else { console.log("NO GPS") }
-  }
-
-
   leafletCenterOnPosition(position: Leaflet.LatLng) {
     if (position) {
       console.log('center on position');
@@ -259,22 +265,31 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
   }
 
+  updateDisplay(speedInKmH: number, alt:number) {
+    const speedElement = document.getElementById('speed');
+    if (speedElement) {
+      speedElement.innerText = speedInKmH.toFixed(2) + ' km/h';
+    }
+    else console.log("Speed element not found")
+
+    const altElement = document.getElementById('alt');
+    if (altElement) {
+      altElement.innerText = alt.toFixed(4) + ' m';
+    }
+    else console.log("Speed element not found")
+  }
 
   onMapReady(map: Leaflet.Map) {
     this.map = map;
     console.log('Leaflet Map ready ');
   }
 
-
   onSave() {
   }
 
-  //
-  //onGeoPosUpdate() {
-  //  this.updateGpsMapPosition();
-  //  this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
- // }
-
+  // -------------------------------------------------------------------------//
+  // Handle UI actions
+  // -------------------------------------------------------------------------//
   onBTCenter(){
     if (this.geoLocation.latitude) {
       const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
@@ -292,19 +307,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
   }
 
-  updateDisplay(speedInKmH: number, alt:number) {
-    const speedElement = document.getElementById('speed');
-    if (speedElement) {
-      speedElement.innerText = speedInKmH.toFixed(2) + ' km/h';
-    }
-    else console.log("Speed element not found")
 
-    const altElement = document.getElementById('alt');
-    if (altElement) {
-      altElement.innerText = alt.toFixed(4) + ' m';
-    }
-    else console.log("Speed element not found")
-  }
 
   leafletBTCenterOnPosition() {
     console.log('FollowMe toggled');
