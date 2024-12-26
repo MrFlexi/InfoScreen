@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Yolo v8</ion-card-title>
+    </ion-card-header>
+  
+  <ion-card-content>
+    <img [src]="photo_original.webviewPath" class="thumb-img"/>
+      <ul>
+        <!-- Iteriere über die statistics Liste -->
+        <li *ngFor="let stat of jsonData.statistics">
+          <strong>{{ stat.className }}</strong>: {{ stat.classCount }}
+        </li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="center">
+    <ion-fab-button size="small" (click)="takePicture()">
+      <ion-icon name="camera-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

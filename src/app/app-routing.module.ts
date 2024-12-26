@@ -17,7 +17,11 @@ const routes: Routes = [
   {
     path: 'edit-webcams',
     loadChildren: () => import('./edit-webcams/edit-webcams.module').then( m => m.EditWebcamsPageModule)
+  },  {
+    path: 'yolo',
+    loadChildren: () => import('./yolo/yolo.module').then( m => m.YoloPageModule)
   }
+
 ];
 @NgModule({
   imports: [

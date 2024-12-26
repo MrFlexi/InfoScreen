@@ -30,6 +30,7 @@ export class Tab3Page implements OnInit, OnDestroy {
   private speedControl = new Leaflet.Control({ position: 'topright' });  // Leaflet control to display speed
   private subscriptions: Subscription[] = [];
 
+  positionCrosshair: any;
 
   constructor(public geoLocation: GeolocationService,
     public dataService: DataService, private platform: Platform) {
@@ -55,7 +56,7 @@ export class Tab3Page implements OnInit, OnDestroy {
       this.geoLocation.getLocationUpdates().subscribe({
         next: (position: Position) => {
           console.log('UI GPS update received');
-          this.updateGpsMapPosition();
+          this.updateGpsMapPosition(position);
         },
         error: (error) => {
           console.log('Subscription error');
@@ -93,6 +94,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
     console.log('UI unsubscribed');
   }
+
 
 
   leafletInit() {
@@ -166,63 +168,76 @@ export class Tab3Page implements OnInit, OnDestroy {
     ).addTo(this.map);
   }
 
-
-  leafletSetBottle(position: any, layer: Leaflet.LayerGroup) {
+  leafletSetBottle(position: Leaflet.LatLng, layer: Leaflet.LayerGroup) {
     if (this.map) {
-      console.log('Map Position updated');
-      const that = this;
-
+      console.log('Add Icon bottle');
+    
       // Add in a crosshair for the map
       const bottleIcon = Leaflet.icon({
         iconUrl: '../../../../assets/icon/bottle.png',
         iconSize: [20, 20], // size of the icon
         iconAnchor: [10, 10], // point of the icon which will correspond to marker's location
       });
-      const bottle = Leaflet.marker(position, { icon: bottleIcon });
-      this.trackLayerGroup.addLayer(bottle);
-      //this.map.addLayer(layer);
+
+      const bottle = Leaflet.marker(position, { icon: bottleIcon }).addTo(layer);
     }
     else console.log('Map not defined');
   }
 
-
-
-  leafletSetCrosshair(position: any) {
+  leafletSetWayPoint(position: Leaflet.LatLng, layer: Leaflet.LayerGroup) {
     if (this.map) {
-      const that = this;
-      console.log('Map Crosshair updated', position);      
-      const markerCircle = Leaflet.circleMarker(position, {
+      console.log('Add Waypoint');
+
+      const wayPoint = Leaflet.circleMarker(position, {
+        color: 'blue',
+        fillColor: '#f03',
+        fillOpacity: 0.1,
+        radius: 5
+      }).addTo(layer);
+    }
+    else console.log('Map not defined');
+  }
+
+  leafletSetCrosshair(position: Leaflet.LatLng) {
+    if (this.map) {    
+      if( typeof this.positionCrosshair == "undefined")
+      {
+        console.log('Init Crosshair'); 
+      this.positionCrosshair = Leaflet.circleMarker(position, {
         color: 'orange',
         fillColor: '#f03',
         fillOpacity: 0.1,
         radius: 20
       });
-      markerCircle.setRadius(40);
-      this.map.addLayer(markerCircle);
-      //this.map.on('move', function (e) {
-      //  markerCircle.setLatLng(that.map.getCenter());
-      //});
+      this.positionCrosshair.setRadius(40).addTo(this.locationLayerGroup)
+    } else
+    {
+      console.log('Crosshair moved to: ',position);
+      this.positionCrosshair.setLatLng(position);
+    }
     }
     else console.log('Map not defined');
   }
 
-
+  // -------------------------------------------------------------------------//
   // Is called whenever a new GPS position is received
-  updateGpsMapPosition() {
-    this.geoLocation.showToast("GPS update...")
+  // -------------------------------------------------------------------------//
+  updateGpsMapPosition(gps_position: Position) {
+    var s = new Date(gps_position.timestamp).toLocaleTimeString("de-DE")
+    this.geoLocation.showToast("GPS update..." + s)
     if (this.geoLocation.latitude) {
-      const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
-      this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
+      const position = new Leaflet.LatLng(gps_position.coords.latitude, gps_position.coords.longitude );
+      this.updateDisplay(gps_position.coords.speed, gps_position.coords.speed)
 
       if (this.checkboxCenterOnPosition) {
         console.log('Center on position');
-        this.leafletCenterOnPosition();
+        this.leafletCenterOnPosition(position);
         this.leafletSetCrosshair(position);
       }
 
       if (this.checkboxSetTrack) {
         "Set a position icon"
-        this.leafletSetMarkerOnPosition();
+        this.leafletSetWayPoint(position, this.trackLayerGroup)
       }
 
     }
@@ -230,9 +245,8 @@ export class Tab3Page implements OnInit, OnDestroy {
   }
 
 
-  leafletCenterOnPosition() {
-    if (this.geoLocation.latitude) {
-      const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
+  leafletCenterOnPosition(position: Leaflet.LatLng) {
+    if (position) {
       console.log('center on position');
       if (this.map) {
         this.map.setView(position, 16);
@@ -246,17 +260,6 @@ export class Tab3Page implements OnInit, OnDestroy {
   }
 
 
-  leafletSetMarkerOnPosition() {
-    const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
-    console.log('set marker');
-    if (this.map) {
-      this.leafletSetBottle(position, this.trackLayerGroup)
-      //var marker = Leaflet.marker(position).addTo(this.map);
-      //this.map.addLayer(marker);
-    }
-    else console.log('Map not defined');
-  }
-
   onMapReady(map: Leaflet.Map) {
     this.map = map;
     console.log('Leaflet Map ready ');
@@ -266,19 +269,27 @@ export class Tab3Page implements OnInit, OnDestroy {
   onSave() {
   }
 
-  onGeoPosUpdate() {
-    this.updateGpsMapPosition();
-    this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
-  }
+  //
+  //onGeoPosUpdate() {
+  //  this.updateGpsMapPosition();
+  //  this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
+ // }
 
   onBTCenter(){
     if (this.geoLocation.latitude) {
       const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
         "Center map on position"
-        this.leafletCenterOnPosition();
-        this.leafletSetCrosshair(position);
-        this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
-      }
+      this.leafletCenterOnPosition(position);
+  
+      this.leafletSetCrosshair(position);
+      this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
+      
+      //const position1 = new Leaflet.LatLng(11.00, 12.00);
+      //const position2 = new Leaflet.LatLng(11.01, 12.00);
+      //  this.leafletCenterOnPosition(position1);
+      //  this.leafletSetWayPoint(position1, this.trackLayerGroup);
+      //  this.leafletSetWayPoint(position2, this.trackLayerGroup);
+    }
   }
 
   updateDisplay(speedInKmH: number, alt:number) {
@@ -286,11 +297,13 @@ export class Tab3Page implements OnInit, OnDestroy {
     if (speedElement) {
       speedElement.innerText = speedInKmH.toFixed(2) + ' km/h';
     }
+    else console.log("Speed element not found")
 
     const altElement = document.getElementById('alt');
     if (altElement) {
       altElement.innerText = alt.toFixed(4) + ' m';
     }
+    else console.log("Speed element not found")
   }
 
   leafletBTCenterOnPosition() {
