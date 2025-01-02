@@ -46,7 +46,16 @@
     "long": 11.699395781532889,
     "description": "Holzkirchen",
     "direction": 0
+  },
+  {
+    "id": 7,
+    "url": "https://mgc-golf.de/wp-content/themes/enfold-child/webcam_thalkirchen/cam1.jpg",
+    "lat": 48.09225951685226, 
+    "long": 11.542594704333139,
+    "description": "München Thalkirchen",
+    "direction": 180
   }
+
 ]
 
 

@@ -75,12 +75,12 @@ export class Tab3Page implements OnInit, OnDestroy {
     this.geoLocation.showToast("GPS update..." + timestrg)
     if (this.geoLocation.latitude) {
       const position = new Leaflet.LatLng(gps.coords.latitude, gps.coords.longitude );
-      this.updateDisplay(gps.coords.speed, gps.coords.speed)
+      this.updateDisplay(gps.coords.speed, gps.coords.altitude)
       
       if (this.checkboxCenterOnPosition) {
         console.log('Center on position');
         this.leafletCenterOnPosition(position);
-        this.leafletSetCrosshair(position);
+        this.leafletSetCrosshair(position, gps.coords.accuracy);
       }
       
       if (this.checkboxSetTrack) {
@@ -230,7 +230,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     else console.log('Map not defined');
   }
 
-  leafletSetCrosshair(position: Leaflet.LatLng) {
+  leafletSetCrosshair(position: Leaflet.LatLng, radius: number) {
     if (this.map) {    
       if( typeof this.positionCrosshair == "undefined")
       {
@@ -241,11 +241,12 @@ export class Tab3Page implements OnInit, OnDestroy {
         fillOpacity: 0.1,
         radius: 20
       });
-      this.positionCrosshair.setRadius(40).addTo(this.locationLayerGroup)
+      this.positionCrosshair.setRadius(radius).addTo(this.locationLayerGroup)
     } else
     {
       console.log('Crosshair moved to: ',position);
       this.positionCrosshair.setLatLng(position);
+      this.positionCrosshair.setRadius(radius);
     }
     }
     else console.log('Map not defined');
@@ -290,23 +291,13 @@ export class Tab3Page implements OnInit, OnDestroy {
   // -------------------------------------------------------------------------//
   // Handle UI actions
   // -------------------------------------------------------------------------//
-  onBTCenter(){
-    if (this.geoLocation.latitude) {
-      const position = new Leaflet.LatLng(this.geoLocation.latitude, this.geoLocation.longitude);
-        "Center map on position"
+  async onBTCenter(){
+    const gps = await this.geoLocation.getGeolocation();
+      const position = new Leaflet.LatLng(gps.coords.latitude, gps.coords.longitude);
       this.leafletCenterOnPosition(position);
-  
-      this.leafletSetCrosshair(position);
-      this.updateDisplay(this.geoLocation.speed, this.geoLocation.altitude)
-      
-      //const position1 = new Leaflet.LatLng(11.00, 12.00);
-      //const position2 = new Leaflet.LatLng(11.01, 12.00);
-      //  this.leafletCenterOnPosition(position1);
-      //  this.leafletSetWayPoint(position1, this.trackLayerGroup);
-      //  this.leafletSetWayPoint(position2, this.trackLayerGroup);
-    }
+      this.leafletSetCrosshair(position, gps.coords.accuracy );
+      this.updateDisplay(gps.coords.speed, gps.coords.altitude)
   }
-
 
 
   leafletBTCenterOnPosition() {

@@ -44,10 +44,11 @@ constructor(public toastCtrl: ToastController) {
  }
 
  async getGeolocation(){
-  const coordinates = await Geolocation.getCurrentPosition();
-  this.latitude = coordinates.coords.latitude;
-  this.longitude = coordinates.coords.longitude;
-  this.speed = coordinates.coords.speed;
+  const position = await Geolocation.getCurrentPosition();
+  this.latitude = position.coords.latitude;
+  this.longitude = position.coords.longitude;
+  this.speed = position.coords.speed;
+  return position;
  }
 
  async showToast(msg: string) {
@@ -58,7 +59,6 @@ constructor(public toastCtrl: ToastController) {
   });
   toast.present();
 }
-
 
 getLocationUpdates(): Observable<Position> {
   return new Observable<Position>((observer) => {
