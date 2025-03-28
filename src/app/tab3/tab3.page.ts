@@ -268,13 +268,13 @@ export class Tab3Page implements OnInit, OnDestroy {
 
   updateDisplay(speedInKmH: number, alt:number) {
     const speedElement = document.getElementById('speed');
-    if (speedElement) {
+    if (speedElement && speedInKmH !== null) {
       speedElement.innerText = speedInKmH.toFixed(2) + ' km/h';
     }
     else console.log("Speed element not found")
 
     const altElement = document.getElementById('alt');
-    if (altElement) {
+    if (altElement && alt !== null) {
       altElement.innerText = alt.toFixed(4) + ' m';
     }
     else console.log("Speed element not found")

@@ -33,14 +33,6 @@
   },
   {
     "id": 5,
-    "url": "https://moosburg.humweb.de/cam/cam1.jpg",
-    "lat": 48.4700372884054,
-    "long": 11.937340557013744,
-    "description": "Moosburg",
-    "direction": 0
-  },
-  {
-    "id": 6,
     "url": "https://piehlmaier.de/Hokicam/Bilder/Bild001.jpg",
     "lat": 47.87954995971525, 
     "long": 11.699395781532889,
@@ -48,14 +40,29 @@
     "direction": 0
   },
   {
-    "id": 7,
+    "id": 6,
     "url": "https://mgc-golf.de/wp-content/themes/enfold-child/webcam_thalkirchen/cam1.jpg",
     "lat": 48.09225951685226, 
     "long": 11.542594704333139,
     "description": "München Thalkirchen",
     "direction": 180
-  }
-
+  },
+  {
+    "id": 7,
+    "url": "https://www.freising.de/_webcam/images/_pic_wc01n.jpg",
+    "lat":  48.39864995410345, 
+    "long": 11.745130804404447,
+    "description": "Freising",
+    "direction": 50
+  },
+  {
+    "id": 8,
+    "url": "https://moosburg.humweb.de/cam/cam1.jpg",
+    "lat": 48.4700372884054,
+    "long": 11.937340557013744,
+    "description": "Moosburg",
+    "direction": 0
+  }  
 ]
 
 
