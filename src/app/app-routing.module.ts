@@ -20,6 +20,10 @@ const routes: Routes = [
   },  {
     path: 'yolo',
     loadChildren: () => import('./yolo/yolo.module').then( m => m.YoloPageModule)
+  },
+  {
+    path: 'ui5-tab',
+    loadChildren: () => import('./ui5-tab/ui5-tab.module').then( m => m.Ui5TabPageModule)
   }
 
 ];
