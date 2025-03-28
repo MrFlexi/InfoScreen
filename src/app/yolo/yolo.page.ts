@@ -19,6 +19,7 @@ export class YoloPage implements OnInit {
 
   imageUrl: string | null = null; // To display the captured image
   apiUrl: string = 'http://85.209.49.65:41900/detect'; // Replace with your API endpoint
+  infoText: string = 'Take a photo first....';
 
   photo_original: ty_Photo = {    
     name: '',
@@ -62,6 +63,7 @@ export class YoloPage implements OnInit {
       this.photo_original.webviewPath = newPicture.webviewPath;    // Put all images into array
       this.photo_original.filepath = newPicture.filepath;    
       this.photo_original.createdAt = timestamp;
+      this.infoText='Sending to Yolo...'
       this.detectPhoto(this.photo_original.webviewPath)
     }
 
@@ -79,6 +81,7 @@ export class YoloPage implements OnInit {
           next: response => {
             console.log('Upload successful', response)
             this.jsonData = response
+            this.infoText = 'done'
           },
           error: error => console.error('Upload failed', error),
         });
