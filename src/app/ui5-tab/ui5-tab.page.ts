@@ -1,5 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { SettingsComponent } from '../ModalPopups/settings/settings.component';
+
 import '@ui5/webcomponents/dist/Button.js';
+import "@ui5/webcomponents/dist/Label.js";
+import "@ui5/webcomponents-fiori/dist/Timeline.js";
+import "@ui5/webcomponents-fiori/dist/TimelineItem.js";
+import "@ui5/webcomponents-icons/dist/phone.js";
+import "@ui5/webcomponents-icons/dist/calendar.js";
 
 
 @Component({
@@ -9,7 +17,14 @@ import '@ui5/webcomponents/dist/Button.js';
 })
 export class Ui5TabPage implements OnInit {
 
-  constructor() { }
+  constructor(private modalCtrl: ModalController) { }
+
+  async openSettings() {
+    const modal = await this.modalCtrl.create({
+      component: SettingsComponent,
+    });
+    return await modal.present();
+  }
 
   ngOnInit() {
   }
